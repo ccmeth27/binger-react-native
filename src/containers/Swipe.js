@@ -1,34 +1,39 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Swiper from 'react-native-deck-swiper'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Animated } from 'react-native'
 
 
-// function * range (start, end) {
-//   for (let i = start; i <= end; i++) {
-//     yield i
-//   }
-// }
+function * range (start, end) {
+  for (let i = start; i <= end; i++) {
+    yield i
+  }
+}
 
 class Swipe extends Component {
   
     state = {
-      cards: [...range(1, 50)],
+      // cards: [...range(1, 25)],
       swipedAllCards: false,
       swipeDirection: '',
       cardIndex: 0
     }
   
 
-  renderCard = (card, index) => {
+  renderCard = (props, i) => {
     return (
-      <View style={styles.card}>
-        <Text style={styles.text}>{card} - {index}</Text>
-      </View>
+      <View style={styles.container}>
+        <Image source={{uri: this.props.movie.poster_120x171}}
+              style={styles.card}
+              />
+     </View>
     )
   };
 
   onSwiped = (type) => {
-    console.log(`on swiped ${type}`)
+    this.setState({
+      cardIndex: this.state.cardIndex + 1
+    })
+    console.log(this.state.cardIndex)
   }
 
   onSwipedAllCards = () => {
@@ -40,10 +45,13 @@ class Swipe extends Component {
   swipeLeft = () => {
     this.swiper.swipeLeft()
   };
+  swipeRight = () => {
+    this.swiper.swipeRight()
+  };
 
   render () {
     return (
-      <View style={styles.container}>
+      <Animated.View >
         <Swiper
           ref={swiper => {
             this.swiper = swiper
@@ -51,16 +59,16 @@ class Swipe extends Component {
           onSwiped={() => this.onSwiped('general')}
           onSwipedLeft={() => this.onSwiped('left')}
           onSwipedRight={() => this.onSwiped('right')}
-          onSwipedTop={() => this.onSwiped('top')}
-          onSwipedBottom={() => this.onSwiped('bottom')}
+          // onSwipedTop={() => this.onSwiped('top')}
+          // onSwipedBottom={() => this.onSwiped('bottom')}
           onTapCard={this.swipeLeft}
-          cards={this.state.cards}
+          cards={this.props.movie}
           cardIndex={this.state.cardIndex}
-          cardVerticalMargin={80}
+          cardVerticalMargin={20}
           renderCard={this.renderCard}
           onSwipedAll={this.onSwipedAllCards}
           stackSize={3}
-          stackSeparation={15}
+          stackSeparation={5}
           overlayLabels={{
             left: {
               title: 'NOPE',
@@ -75,13 +83,13 @@ class Swipe extends Component {
                   flexDirection: 'column',
                   alignItems: 'flex-end',
                   justifyContent: 'flex-start',
-                  marginTop: 30,
-                  marginLeft: -30
+                  marginTop: 20,
+                  marginLeft: -20
                 }
               }
             },
             right: {
-              title: 'LIKE',
+              title: 'ADDED',
               style: {
                 label: {
                   backgroundColor: 'black',
@@ -93,8 +101,8 @@ class Swipe extends Component {
                   flexDirection: 'column',
                   alignItems: 'flex-start',
                   justifyContent: 'flex-start',
-                  marginTop: 30,
-                  marginLeft: 30
+                  marginTop: 20,
+                  marginLeft: 20
                 }
               }
             },
@@ -117,27 +125,36 @@ class Swipe extends Component {
           }}
           animateOverlayLabelsOpacity
           animateCardOpacity
-          swipeBackCard
+          // swipeBackCard
         >
-          <Button onPress={() => this.swiper.swipeBack()} title='Swipe Back' />
         </Swiper>
-      </View>
+      </Animated.View>
     )
   }
 }
 
+const SCREEN_HEIGHT = Dimensions.get('window').height
+const SCREEN_WIDTH = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF'
+    height: SCREEN_HEIGHT - 200,
+    width: SCREEN_WIDTH - 25,
+    marginTop: 20,
+    alignSelf: 'center',
+    padding: 30,
+    position: 'absolute',
+    left: -100,
+    top: -40
   },
   card: {
     flex: 1,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: '#E8E8E8',
-    justifyContent: 'center',
-    backgroundColor: 'white'
+      borderRadius: 25,
+        borderWidth: 1,
+        resizeMode: "cover",
+        borderColor: '#E8E8E8',
+        justifyContent: 'center',
+        backgroundColor: 'white'
   },
   text: {
     textAlign: 'center',
@@ -155,4 +172,4 @@ const styles = StyleSheet.create({
 
  
 
- 
+ export default Swipe
