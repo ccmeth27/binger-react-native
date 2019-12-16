@@ -1,13 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import DiscoverContainer from './src/containers/DiscoverContainer'
-
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 
 function App() {
+
+  const rootReducer = combineReducers({...reducers});
+  const store = createStore(rootReducer, applyMiddleware(thunk));
   return (
-    <View style={styles.container}>
-      <DiscoverContainer/>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <DiscoverContainer/>
+      </View>
+    </Provider>
   );
 }
 
