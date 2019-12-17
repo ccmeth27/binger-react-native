@@ -9,7 +9,7 @@ function * range (start, end) {
   }
 }
 
-class Swipe extends Component {
+class DiscoverScreen extends Component {
   
     state = {
       // cards: [...range(1, 25)],
@@ -172,4 +172,4 @@ const styles = StyleSheet.create({
 
  
 
- export default Swipe
+ export default DiscoverScreen

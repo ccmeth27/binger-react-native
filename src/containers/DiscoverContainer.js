@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Header } from 'react-native-elements'
 import DiscoverCard from "./DiscoverCard";
 import ActionButtons from './ActionButtons'
-import Swipe from './Swipe'
+import Swipe from './DiscoverScreen'
 class DiscoverContainer extends Component {
 
     state = {
