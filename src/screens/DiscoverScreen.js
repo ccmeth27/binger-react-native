@@ -53,6 +53,7 @@ class DiscoverScreen extends Component {
     return (
       <Animated.View >
         <Swiper
+          useViewOverflow={false}
           ref={swiper => {
             this.swiper = swiper
           }}

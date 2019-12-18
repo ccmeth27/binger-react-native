@@ -10,7 +10,7 @@ class InputField extends Component {
       textColor,
       borderBottomColor,
       inputType,
-      customStyle
+      customStyle,
     } = this.props;
     const color = labelColor || 'white';
     const fontSize = labelTextSize || 14;
@@ -20,6 +20,11 @@ class InputField extends Component {
         <View style={[customStyle, styles.wrapper]}>
           <Text style={[{ color, fontSize }, styles.label]}>{labelText}</Text>
           <TextInput
+            onBlur={this.props.onBlur}
+            onFocus={this.props.onFocus}
+            onChangeText={this.props.onChange}
+            // onChange={this.props.onChangeText}
+            onEndEditing={this.props.onEndEditing}
             autoCorrect={false}
             style={[
               { color: inputColor, borderBottomColor: borderBottom },

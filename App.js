@@ -1,55 +1,82 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, Button, TouchableOpacity } from 'react-native';
-import DiscoverScreen from './src/containers/DiscoverScreen'
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import reducers from './src/reducers'
-import LoginScreen from './src/components/LoginScreen'
-import RegisterScreen from './src/components/RegisterScreen'
+// import thunk from 'redux-thunk';
+// import { Provider, connect } from 'react-redux';
+// import { applyMiddleware, combineReducers, createStore } from 'redux';
+// import allReducers from './src/reducers/index'
+import LoginScreen from './src/screens/LoginScreen'
+import RegisterScreen from './src/screens/RegisterScreen'
+import DiscoverScreen from './src/screens/DiscoverScreen'
 import { createAppContainer } from 'react-navigation'
+
+
 import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { FontAwesome } from "react-native-vector-icons";
+
+// import { SignedOutContainer, SignedInContainer, createRootNavigator } from './router'
+
+
 
 class App extends Component {
+  
 
-  
-  
-  
-  render() {
-      return (
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.buttonContainer}>  
-            <Button style={styles.authButtons}
-            title="Register"
-            onPress={() => this.props.navigation.navigate('RegisterScreen')}
-            /> 
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.textSpacer}>or</Text>
-          </View>
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Button style={styles.authButtons}
-            title="Log In"
-            onPress={() => this.props.navigation.navigate('LoginScreen')}
-            /> 
-          </TouchableOpacity>
-        </View>
-    );
+  state = { user: null}
+
+  setUser = user => {
+    this.setState({ user: user})
   }
+  // componentDidMount() {
+  //   isSignedIn()
+  //     .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+  //     // .catch(err => alert("An error occurred"));
+    
+  // }
+  
+    render() {
+    
+        return (
+          //current issue is that the 'store' cant be passed through react-navigation
+          // <Provider >
+            <View style={styles.container}>
+              <TouchableOpacity style={styles.buttonContainer}>  
+                <Button style={styles.authButtons}
+                title="Register"
+                onPress={() => this.props.navigation.navigate('RegisterScreen')}
+                /> 
+              </TouchableOpacity>
+              <View>
+                <Text style={styles.textSpacer}>or</Text>
+              </View>
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Button style={styles.authButtons}
+                title="Log In"
+                onPress={() => this.props.navigation.navigate('LoginScreen')}
+                /> 
+              </TouchableOpacity>
+            </View> 
+          // </Provider>
+          );
+    }
+  
 }
+// const rootReducer = combineReducers({...allReducers});
+// const store = createStore(rootReducer, applyMiddleware(thunk));
+// const store = createStore(allReducers);
 
-//export default App
-//react navigation
+
 const AppNavigator = createStackNavigator({
   Home: App,
   RegisterScreen: RegisterScreen,
-  LoginScreen: LoginScreen,
-  DiscoverScreen: DiscoverScreen
+  LoginScreen: LoginScreen
+  
 })
 const AppContainer = createAppContainer(AppNavigator)
 export default AppContainer
 
 
+
+//Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,56 +124,5 @@ const styles = StyleSheet.create({
   }
 });
 
-const rootReducer = combineReducers({...reducers});
-const store = createStore(rootReducer, applyMiddleware(thunk));
 
 
-// signUp(){
-//   Auth.signUp({
-//     username: 'ccmeth',
-//     password: 'password123',
-//     attributes: {
-//       email: 'connormeth27@gmail.com',
-//       phone_number: '9086981404'
-//     }
-//   })
-//   .then(res => {
-//     console.log('successful signup: ', res)
-//   })
-//   .catch(err => {
-//     console.log('error: ', err)
-//   })
-// }
-
-// confirmUser() {
-//   const { authCode } = this.state
-//   Auth.confirmSignUp('ccmeth', authCode)
-//   .then(res => {
-//     console.log('successful confirmation: ', res)
-//   })
-//   .catch(err => {
-//     console.log('error confirming user: ', err)
-//   })
-// }
-// onChangeText(authCode) {
-//   this.setState({ authCode })
-// }
-
-// signIn() { // 1
-//   Auth.signIn(username, password)
-//     .then(user => {
-//     // save user in state somewhere
-//     })
-//     .catch(err => {
-//       console.log('error signing in: ', err)
-//     })
-// }
-
-// confirmSignIn() { // 2
-//   Auth.confirmSignIn(user, authCode)
-//     .then(user => {
-//       console.log('user: ', user)
-//     }).catch(err => {
-//       console.log('error confirming sign in: ', err)
-//     })
-// }
