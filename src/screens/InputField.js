@@ -22,8 +22,8 @@ class InputField extends Component {
           <TextInput
             onBlur={this.props.onBlur}
             onFocus={this.props.onFocus}
-            onChangeText={this.props.onChange}
-            // onChange={this.props.onChangeText}
+            onChangeText={this.props.onChangeText}
+            onChange={this.props.onChange}
             onEndEditing={this.props.onEndEditing}
             autoCorrect={false}
             style={[

@@ -1,10 +1,13 @@
 import React, {Component, Fragment} from 'react'
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Header } from 'react-native-elements'
-import DiscoverCard from "./DiscoverCard";
 import ActionButtons from './ActionButtons'
-import DiscoverScreen from './screens/DiscoverScreen'
-class DiscoverContainer extends Component {
+import DiscoverScreen from '../screens/DiscoverScreen'
+import { createAppContainer } from 'react-navigation'
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import ProfileScreen from '../screens/ProfileScreen';
+
+class HomeContainer extends Component {
 
     state = {
         movies: [],
@@ -16,45 +19,40 @@ class DiscoverContainer extends Component {
     }
 
     fetchMovies() {
-        fetch(`http://api-public.guidebox.com/v2/movies?api_key=b2636036f4e6d0d8841b339a37d3b4c4cff03bd5`)
+        fetch(`http://api-public.guidebox.com/v2/movies?api_key=ecdec86bafadac43c038330199eec79294c468d8`)
         .then(resp => resp.json())
         .then(movieData =>{
             this.setState({
             movies: movieData.results,
             loading: false
             })
-        }
-        )
+        })
+        .catch((error) => {
+            console.error(error);
+          });
     }
 
     render() {
         return(
-            <Fragment>
-                <Header style={styles.header}
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: 'binger', style: { color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
-                    />
+            <View>
                 {this.state.loading ?
                 <View style={{ flex: 1 }}>
-                    
                     <Text style={styles.loading}>Loading...</Text>
-                
-                    <ActionButtons style={styles.buttons} />
                 </View>
                 :
                  <View style={{ flex: 1 }}> 
-                    {this.state.movies.map(movie => <Swipe style={{ flex: 1 }} key={movie.id} movie={movie}/>).reverse()}
+                    {this.state.movies.map(movie => <DiscoverScreen style={{ flex: 1 }} key={movie.id} movie={movie}/>).reverse()}
                     <ActionButtons style={styles.buttons} />
                 </View>
                 }
-            </Fragment>
+            </View>
         )
     }
 }
-export default DiscoverContainer
 
-const guideBoxAPI = 'b2636036f4e6d0d8841b339a37d3b4c4cff03bd5'
+export default HomeContainer
+
+const guideBoxAPI = 'ecdec86bafadac43c038330199eec79294c468d8'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 const styles = StyleSheet.create({
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        bottom: 20,
+        bottom: 10,
     },
     loading:{
         fontSize: 40,

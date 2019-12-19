@@ -6,13 +6,14 @@ import { StyleSheet, Text, View, Dimensions, Button, TouchableOpacity } from 're
 // import allReducers from './src/reducers/index'
 import LoginScreen from './src/screens/LoginScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
-import DiscoverScreen from './src/screens/DiscoverScreen'
-import { createAppContainer } from 'react-navigation'
-
-
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+import DiscoverScreen from './src/screens/DiscoverScreen'
 import { FontAwesome } from "react-native-vector-icons";
+import HomeContainer from './src/containers/HomeContainer';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import ProfileScreen from './src/screens/ProfileScreen';
+import HomeNavigator from './src/containers/HomeNavigator'
 
 // import { SignedOutContainer, SignedInContainer, createRootNavigator } from './router'
 
@@ -21,28 +22,29 @@ import { FontAwesome } from "react-native-vector-icons";
 class App extends Component {
   
 
-  state = { user: null}
-
-  setUser = user => {
-    this.setState({ user: user})
+  state = { 
+    currentUser: null,
+    loggedIn: false
   }
-  // componentDidMount() {
-  //   isSignedIn()
-  //     .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
-  //     // .catch(err => alert("An error occurred"));
-    
-  // }
+
+  setUser = (user) => {
+    this.setState({ 
+      currentUser: user,
+      loggedIn: true
+    })
+  }
+  
   
     render() {
-    
+      console.log(this.state.currentUser)
+      if(this.state.currentUser === null && this.state.logged_in ===true)
         return (
-          //current issue is that the 'store' cant be passed through react-navigation
-          // <Provider >
             <View style={styles.container}>
+              
               <TouchableOpacity style={styles.buttonContainer}>  
                 <Button style={styles.authButtons}
                 title="Register"
-                onPress={() => this.props.navigation.navigate('RegisterScreen')}
+                onPress={() => this.props.navigation.navigate('Register',{setUser: this.setUser})}
                 /> 
               </TouchableOpacity>
               <View>
@@ -51,30 +53,33 @@ class App extends Component {
               <TouchableOpacity style={styles.buttonContainer}>
                 <Button style={styles.authButtons}
                 title="Log In"
-                onPress={() => this.props.navigation.navigate('LoginScreen')}
+                onPress={() => this.props.navigation.navigate('Login',{setUser: this.setUser})}
                 /> 
               </TouchableOpacity>
             </View> 
-          // </Provider>
-          );
+          
+        );
+        else {
+          return (
+            <View style={styles.container}>
+              <HomeContainer currentUser={this.state.currentUser}/>
+            </View>
+          )}
     }
   
 }
-// const rootReducer = combineReducers({...allReducers});
-// const store = createStore(rootReducer, applyMiddleware(thunk));
-// const store = createStore(allReducers);
 
-
-const AppNavigator = createStackNavigator({
+const AuthStack = createStackNavigator({
   Home: App,
-  RegisterScreen: RegisterScreen,
-  LoginScreen: LoginScreen
+  Register: RegisterScreen,
+  Login: LoginScreen,
+});
+const AuthNavigator = createAppContainer(AuthStack)
+export default AuthNavigator
+    
+    
   
-})
-const AppContainer = createAppContainer(AppNavigator)
-export default AppContainer
-
-
+    
 
 //Styling
 const styles = StyleSheet.create({

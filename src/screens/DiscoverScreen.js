@@ -62,7 +62,7 @@ class DiscoverScreen extends Component {
           onSwipedRight={() => this.onSwiped('right')}
           // onSwipedTop={() => this.onSwiped('top')}
           // onSwipedBottom={() => this.onSwiped('bottom')}
-          onTapCard={this.swipeLeft}
+          // onTapCard={this.swipeLeft}
           cards={this.props.movie}
           cardIndex={this.state.cardIndex}
           cardVerticalMargin={20}
@@ -85,7 +85,7 @@ class DiscoverScreen extends Component {
                   alignItems: 'flex-end',
                   justifyContent: 'flex-start',
                   marginTop: 20,
-                  marginLeft: -20
+                  marginRight: 40
                 }
               }
             },
@@ -103,7 +103,7 @@ class DiscoverScreen extends Component {
                   alignItems: 'flex-start',
                   justifyContent: 'flex-start',
                   marginTop: 20,
-                  marginLeft: 20
+                  marginLeft: -60
                 }
               }
             },

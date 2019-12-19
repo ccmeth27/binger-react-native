@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Button } from "react-native";
 import InputField from './InputField'
-import NextButton from './NextButton'
 import DiscoverScreen from './DiscoverScreen'
 
 
@@ -12,39 +11,35 @@ export default class LoginScreen extends Component {
     password: ''
   }
 
-  usernameChange = () => {
-    console.log(event.target.value)
-    this.setState({
-      username: event.target.value
-    })
-  }
-  passwordChange = () => {
-    console.log(event.target.value)
-    this.setState({
-      password: event.target.value
-    })
-  }
 
-  handleSubmit = e => {
+
+  handleSubmit = (e) => {
     e.preventDefault()
-    fetch('http://localhost:3000/login', {
+    let usernameInput = this.state.username
+    let passwordInput = this.state.password
+    fetch('http://localhost:3001/api/v1/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: this.state.username,
-        password_digest: this.state.password
+        username: usernameInput,
+        password: passwordInput
       })
     })
     .then(resp => resp.json())
     .then(data => {
-      console.log(data)
+      this.props.navigation.navigate('Home')
+      this.props.navigation.state.params.setUser(data.user)
+    })
+    .catch((error) => {
+      console.log(error);
     })
   }
 
   render() {
+    // console.log(this.props)
     return (
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView}>
@@ -57,7 +52,7 @@ export default class LoginScreen extends Component {
               borderBottomColor={"white"} 
               inputType="username" 
               customStyle={{marginTop:40}} 
-              onChange={this.usernameChange}  
+              onChangeText={(text) => {this.setState({username: text})}}  
             />
             <InputField 
               labelText="PASSWORD" 
@@ -67,13 +62,13 @@ export default class LoginScreen extends Component {
               borderBottomColor={'white'} 
               inputType="password"  
               customStyle={{marginTop:40}}
-              onChange={this.passwordChange}
+              onChangeText={(text) => {this.setState({password: text})}}
             />
           </ScrollView>
           <TouchableOpacity style={styles.buttonBorder}>
             <Button 
             style={styles.submitButton} 
-            title="Submit"
+            title="Login"
             onPress={this.handleSubmit} />
           </TouchableOpacity>
           
@@ -114,8 +109,9 @@ const styles = StyleSheet.create({
     },
     buttonBorder: {
       padding: 20,
-      bottom: 10,
+      bottom: 60,
       borderWidth: 1,
+      borderRadius: 25,
       borderColor: 'white',
       backgroundColor: 'grey',
       width: 150,

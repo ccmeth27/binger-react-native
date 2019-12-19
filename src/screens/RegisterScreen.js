@@ -4,7 +4,7 @@ import { reduxForm } from 'redux-form/immutable'
 import { Input, Switch } from 'react-native-clean-form/redux-form-immutable'
 import { View, Text, StyleSheet, ScrollView, Button, TouchableOpacity } from 'react-native'
 import InputField from './InputField'
-import NextButton from './NextButton'
+
 
 
 
@@ -16,47 +16,47 @@ class RegisterScreen extends Component {
     password_confirmation: ''
   }
 
-  usernameChange = () => {
-    let input = event.target.value
-    console.log(input)
-    this.setState({
-      username: input
-    })
-  }
-  passwordChange = () => {
-    console.log(event.target.value)
-    this.setState({
-      password: event.target.value
-    })
-  }
-  confirmationChange = () => {
-    console.log(event.target.value)
-    this.setState({
-      password_confirmation: event.target.value
-    })
-  }
-
   
   handleSubmit = () => {
     
     let usernameInput = this.state.username
     let passwordInput = this.state.password
-    fetch('http://localhost:3001/api/v1/users', {
-      method: 'POST',
-      
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: usernameInput,
-        password_digest: passwordInput
-      }),
-    })
-    .then(resp => resp.json())
-    .then(responseData => {
-      console.info(responseData) 
-    })
+    if (this.state.password === this.state.password_confirmation)
+      fetch('http://localhost:3001/api/v1/users', {
+        method: 'POST',
+
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: usernameInput,
+          password: passwordInput
+        }),
+      })
+      .then(resp => resp.json())
+      .then(response => {
+        console.log(response)
+        if(response.errors){
+          alert(response.errors)
+        } 
+        else {
+          this.props.navigation.navigate('Home', {
+            status: response.status,
+            user: response.user,
+            user_id: response.user.id,
+            token: response.token
+
+          })
+          this.props.navigation.state.params.setUser(data.user)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    else {
+      alert('Passwords do not match!')
+    }
   }
 
   render () {
@@ -71,11 +71,7 @@ class RegisterScreen extends Component {
             inputType="username" 
             customStyle={{marginTop:40}}
             borderBottomColor={'white'}
-            // onEndEditing={this.usernameChange} 
-            onChange={this.usernameChange} 
-            //works in Browser
-            // onChangeText={this.usernameChange} 
-            //works in ios Simulator
+            onChangeText={(text) => {this.setState({username: text})}} 
             />
             <InputField 
             name="password" 
@@ -83,9 +79,7 @@ class RegisterScreen extends Component {
             inputType="password" 
             customStyle={{marginTop:40}}
             borderBottomColor={'white'}
-            onChange={this.passwordChange} //works in Browser
-            // onChangeText={this.passwordChange} 
-            //works in ios Simulator
+            onChangeText={(text) => {this.setState({password: text})}} 
             />
             <InputField 
             name="confirm_password" 
@@ -93,9 +87,7 @@ class RegisterScreen extends Component {
             inputType="password"
             customStyle={{marginTop:40}} 
             borderBottomColor={'white'}
-            onChange={this.confirmationChange} //works in Browser
-            // onChangeText={this.confirmationChange} 
-            //works in ios Simulator
+            onChangeText={(text) => {this.setState({password_confirmation: text})}}
             />
           </ScrollView>
           <TouchableOpacity style={styles.buttonBorder}>
@@ -148,8 +140,9 @@ const styles = StyleSheet.create({
   },
   buttonBorder: {
     padding: 20,
-    bottom: 10,
+    bottom: 60,
     borderWidth: 1,
+    borderRadius: 25,
     borderColor: 'white',
     backgroundColor: 'grey',
     width: 150,
